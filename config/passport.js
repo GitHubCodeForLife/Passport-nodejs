@@ -12,6 +12,7 @@ module.exports = (passport)=>{
             //Find user
             const user = await User.findOne({email: email});
             if(!user){
+                console.log('That email is not registered.');
                 return done(null, false, {message: 'That email is not registered.'});   
             }
             //Macth password
@@ -20,6 +21,7 @@ module.exports = (passport)=>{
                 if(result){
                     return done(null, user);
                 }else{
+                    console.log('Password is incorrect.');
                     return done(null, false, {message: 'Password incorrect.'});
                 }
             });

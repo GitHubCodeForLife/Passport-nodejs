@@ -8,10 +8,19 @@ router.get('/',homeController.index);
 router.get('/login',checkNotAuthenticated, homeController.login);
 router.get('/register',checkNotAuthenticated, homeController.register);
 router.post('/register',checkNotAuthenticated,homeController.postRegister);
-router.post('/login',checkNotAuthenticated, passport.authenticate('local', { successRedirect: '/users/dashboard',
-        failureRedirect: '/login',
-        failureFlash: true }));
-
+router.post('/login',checkNotAuthenticated,function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) { return next(err); }
+    if (!user) { 
+      console.log(info['message']);  
+      return res.render('user/login',{title: 'Login Page', message: info['message']});
+     }
+    req.logIn(user, function(err) {
+      if (err) { return next(err); }
+      return res.redirect('/users/dashboard?name=' + user.name);
+    });
+  })(req, res, next);
+});
 // Logout
 router.get('/logout', (req, res) => {
   req.logout();

@@ -11,7 +11,7 @@ exports.register =(req, res, next)=> {
 }
 
 exports.login =(req, res, next)=> {
-    res.render('user/login',{title: 'Login Page'});
+    res.render('user/login',{title: 'Login Page', message: req.message});
 }
 
 exports.postRegister = async(req, res, next)=>{
